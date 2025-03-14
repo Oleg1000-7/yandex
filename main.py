@@ -1,19 +1,11 @@
-import datetime
-
 from data import db_session
-from data.jobs import Jobs
+from data.users import User
 
-db_session.global_init("db/database.db")
+db_session.global_init(f"db/{input()}")
 
 db_sess = db_session.create_session()
 
-job = Jobs(
-    team_leader=1,
-    job="deployment of residential modules 1 and 2",
-    work_size=15,
-    collaborators="2, 3",
-    start_date=datetime.datetime.now(),
-    is_finished=False
-)
-db_sess.add(job)
-db_sess.commit()
+colonists = db_sess.query(User).filter(User.address == "module_1").all()
+
+for colonist in colonists:
+    print(colonist)
