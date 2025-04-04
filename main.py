@@ -55,14 +55,12 @@ job = Jobs(
     job="deployment of residential modules 1 and 2",
     work_size=15,
     collaborators="2, 3",
-    start_date=datetime.datetime.now(),
+    start_date=datetime.now(),
     is_finished=False
 )
 db_sess.add(job)
 
-colonists = db_sess.query(User.id).filter(User.address == "module_1",
-                                          User.speciality.notilike("%engineer%"),
-                                          User.position.notilike("%engineer%")).all()
+colonists = db_sess.query(User.id).filter(User.address == "module_1").all()
 
 for colonist in colonists:
     print(colonist[0])
