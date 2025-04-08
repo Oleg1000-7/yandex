@@ -48,36 +48,28 @@ def create_db(db_sess):
     ]
     for user in user_list:
         db_sess.add(user)
-        db_sess.commit()
 
     jobs_list = [Jobs(
-        team_leader=1,
+        team_leader_id=1,
         job="deployment of residential modules 1 and 2",
         work_size=15,
         collaborators="2, 3",
         start_date=datetime.now(),
         is_finished=False
-        ),
+    ),
         Jobs(
-            team_leader=1,
-            job="deployment of residential modules 1 and 2",
-            work_size=15,
-            collaborators="2, 3",
-            start_date=datetime.now(),
-            is_finished=False
-        ),
-        Jobs(
-            team_leader=1,
-            job="deployment of residential modules 1 and 2",
-            work_size=15,
-            collaborators="2, 3",
+            team_leader_id=1,
+            job="deployment of residential modules 3 and 4",
+            work_size=12,
+            collaborators="4, 5",
             start_date=datetime.now(),
             is_finished=False
         )
     ]
     for job in jobs_list:
         db_sess.add(job)
-        db_sess.commit()
+    db_sess.commit()
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
@@ -85,14 +77,17 @@ app.config['SECRET_KEY'] = 'secret_key'
 if not exists("db/database.db"):
     db_session.global_init("db/database.db")
     create_db(db_sess := db_session.create_session())
+
 else:
     db_session.global_init("db/database.db")
     db_sess = db_session.create_session()
 
+
 @app.route("/")
 def index():
     jobs = db_sess.query(Jobs).all()
-    return render_template("works_log.html", jobs_list=enumerate(jobs))
+    return render_template("works_log.html", jobs_list=enumerate(jobs, start=1))
+
 
 if __name__ == '__main__':
     app.run()

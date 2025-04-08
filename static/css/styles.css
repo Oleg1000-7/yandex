@@ -1,6 +1,6 @@
 table {
     width: 100%;
-   }
+}
 
 th{
     padding: 5px;
@@ -10,31 +10,38 @@ th{
 td {
     padding-left: 10px; padding-right: 10px;
     padding-top: 20px; padding-bottom: 20px;
-    background-color: #bff5ef;
+    background-color: #dbd9fc;
 }
 
 li {
     padding-bottom: 5px;
 }
+
 h4 {
     padding-left: 20px;
 }
+
 .base-header {
     padding-block: 7px;
     padding-left: 5px;
 }
+
 .base-h4 {
     color: #8f8f8f;
 }
+
 .error-text {
     color: #ff2200
 }
+
 .centered-text {
     text-align: center;
 }
+
 .answer-block {
     padding-left: 50px;
 }
+
 .head {
     background-color: #e5e5e5;
 }

@@ -1,5 +1,6 @@
 import datetime
 import sqlalchemy
+from sqlalchemy.orm import relationship
 
 from data.db_session import SqlAlchemyBase
 
@@ -17,6 +18,8 @@ class User(SqlAlchemyBase):
     email = sqlalchemy.Column(sqlalchemy.String, unique=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
+
+    leadership = relationship("Jobs", back_populates="team_leader")
 
     def __repr__(self):
         return f"<Colonist> {self.id} {self.surname} {self.name}"
