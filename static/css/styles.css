@@ -21,7 +21,19 @@ h4 {
     padding-left: 20px;
 }
 
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form > p {
+    width: 75%;
+}
+
 .base-header {
+    display: inline-block;
+    width: auto;
     padding-block: 7px;
     padding-left: 5px;
 }
@@ -44,4 +56,7 @@ h4 {
 
 .head {
     background-color: #e5e5e5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
