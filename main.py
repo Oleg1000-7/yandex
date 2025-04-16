@@ -8,6 +8,7 @@ from data.users import User
 from flask import Flask, render_template, redirect
 from flask_login import LoginManager, login_user, logout_user, login_required
 
+from forms.job_create_form import JobCreateForm
 from forms.login_form import LoginForm
 from forms.register_form import RegisterForm
 
@@ -115,13 +116,13 @@ def reqister():
                                    form=form,
                                    message="Такой пользователь уже есть")
         user = User(
-                surname = form.surname.data,
-                name = form.name.data,
-                age = form.age.data,
-                position = form.position.data,
-                speciality = form.speciality.data,
-                address = form.address.data,
-                email = form.email.data,
+            surname=form.surname.data,
+            name=form.name.data,
+            age=form.age.data,
+            position=form.position.data,
+            speciality=form.speciality.data,
+            address=form.address.data,
+            email=form.email.data,
         )
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -150,6 +151,35 @@ def login():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route("/addjob", methods=['GET', 'POST'])
+def add_job():
+    form = JobCreateForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if not db_sess.query(User).filter(User.id == form.team_leader_id.data).first():
+            return render_template('add_job.html',
+                                   message="Нет тимлида с введенным id",
+                                   form=form)
+
+        ids = set(map(int, form.collaborators.data.split(", ")))
+        if len(db_sess.query(User).filter(User.id.in_(ids)).all()) == len(ids):
+            job = Jobs(
+                team_leader_id=form.team_leader_id.data,
+                job=form.job.data,
+                work_size=form.work_size.data,
+                collaborators=form.collaborators.data,
+                is_finished=form.is_finished.data
+            )
+            db_sess.add(job)
+            db_sess.commit()
+
+            return redirect("/")
+        return render_template('add_job.html',
+                               message="Нет пользователя с введенным id",
+                               form=form)
+    return render_template('add_job.html', title='Adding a job', form=form)
 
 
 if __name__ == '__main__':
