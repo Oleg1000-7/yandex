@@ -1,8 +1,9 @@
 from os.path import exists
+from os import makedirs
 from datetime import datetime
 from sqlalchemy.orm import Session
 
-from data import db_session
+from data import db_session, jobs_api
 from data.jobs import Jobs
 from data.users import User
 from flask import Flask, render_template, redirect
@@ -78,11 +79,13 @@ def create_db(db_sess: Session):
 
 
 app = Flask(__name__)
+app.register_blueprint(jobs_api.blueprint)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'secret_key'
 
 if not exists("db/database.db"):
+    makedirs("db")
     db_session.global_init("db/database.db")
     create_db(db_sess := db_session.create_session())
 
@@ -183,4 +186,4 @@ def add_job():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=5000, debug=True)
