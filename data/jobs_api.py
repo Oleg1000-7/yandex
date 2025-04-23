@@ -30,8 +30,10 @@ def jobs_f():
         if not request.json:
             return make_response(jsonify({'error': 'Empty request'}), 400)
         elif not all(key in request.json for key in
-                     ['team_leader_id', 'job', 'work_size', 'collaborators', 'start_date' , 'end_date' , 'is_finished']):
+                     ['team_leader_id', 'job', 'work_size', 'collaborators', 'start_date', 'end_date', 'is_finished']):
             return make_response(jsonify({'error': 'Bad request'}), 400)
+        #if all([isinstance(i, j) for i, j in zip(request.json.values(), [int, str, int, str, ])])
+
         db_sess = db_session.create_session()
         job = Jobs(
             team_leader_id=request.json['team_leader_id'],
@@ -45,7 +47,6 @@ def jobs_f():
         db_sess.add(job)
         db_sess.commit()
         return jsonify({'id': job.id})
-
 
 
 @blueprint.route('/api/jobs/<int:job_id>', methods=['GET'])

@@ -1,9 +1,11 @@
 from os.path import exists
 from os import makedirs
 from datetime import datetime
+
+from flask_restful import Api
 from sqlalchemy.orm import Session
 
-from data import db_session, jobs_api
+from data import db_session, jobs_api, users_resource
 from data.jobs import Jobs
 from data.users import User
 from flask import Flask, render_template, redirect
@@ -79,6 +81,7 @@ def create_db(db_sess: Session):
 
 
 app = Flask(__name__)
+api = Api(app)
 app.register_blueprint(jobs_api.blueprint)
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -93,6 +96,9 @@ else:
     db_session.global_init("db/database.db")
     db_sess = db_session.create_session()
 
+api.add_resource(users_resource.UsersListResource, '/api/v2/users')
+
+api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:users_id>')
 
 @login_manager.user_loader
 def load_user(user_id):
